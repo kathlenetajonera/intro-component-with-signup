@@ -3,8 +3,15 @@ const submitBtn = document.querySelector("#submit");
 
 inputFields.forEach(inputField => {
     inputField.addEventListener("input", () => {
+        const errorIcon = inputField.nextElementSibling;
+        const errorMessage = inputField.parentElement.nextElementSibling
+
         inputField.classList.remove("error")
-        hideErrorIndicators(inputField)
+        errorIcon.classList.add("hide")
+
+        if (errorMessage.classList.contains("error-message")) {
+            errorMessage.remove()
+        }
     })
 })
 
