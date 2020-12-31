@@ -1,6 +1,8 @@
 const inputFields = document.querySelectorAll("input");
 const submitBtn = document.querySelector("#submit");
 
+let registrationForms = [];
+
 inputFields.forEach(inputField => {
     inputField.addEventListener("input", () => {
         const errorIcon = inputField.nextElementSibling;
@@ -25,6 +27,8 @@ submitBtn.addEventListener("click", e => {
             checkInputFormat(inputField)
         }
     })
+
+    saveInput()
 })
 
 function showErrorMessage(field) {
@@ -111,11 +115,41 @@ function checkInputFormat(field) {
     }
 }
 
+function saveInput() {
+    const firstNameInput = document.querySelector("#firstName")
+    const lastNameInput = document.querySelector("#lastName")
+    const emailInput = document.querySelector("#email")
+    const passwordInput = document.querySelector("#password")
+
+    const filtered = Array.from(inputFields).every(inputField => inputField.dataset.validated === "true")
+
+    if (filtered) {
+        let registrationForm = {
+            firstName: firstNameInput.value,
+            lastName: lastNameInput.value,
+            email: emailInput.value,
+            password: passwordInput.value
+        }
+
+        registrationForms.push(registrationForm)
+
+        //resets to default
+        inputFields.forEach(inputField => inputField.value = "")
+        inputFields.forEach(inputField => inputField.setAttribute("placeholder", inputField.dataset.label))
+        inputFields.forEach(inputField => inputField.setAttribute("data-validated", false))
+
+        firstNameInput.focus()
+
+    } else return;
+
+    console.log(registrationForms)
+}
+
 const showErrorIndicators = elem => {
     const errorIcon = elem.nextElementSibling
     const errorMessage = elem.parentElement.nextElementSibling
 
-    elem.classList.remove("valid")
+    //elem.classList.remove("valid")
     elem.classList.add("error")
     errorIcon.classList.remove("hide")
 
@@ -131,7 +165,7 @@ const hideErrorIndicators = elem => {
     const errorMessage = elem.parentElement.nextElementSibling
 
     elem.classList.remove("error")
-    elem.classList.add("valid")
+    //elem.classList.add("valid")
 
     errorIcon.classList.add("hide")
 
